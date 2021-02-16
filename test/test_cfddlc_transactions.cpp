@@ -605,3 +605,26 @@ TEST(DlcManager, AdaptorSigMultipleNoncesWithFewerMessagesThanNonces) {
       fund_amount, WitnessVersion::kVersion0);
   EXPECT_TRUE(is_valid);
 }
+
+TEST(DlcManager, AdaptorSigMultipleNoncesWithMoreMessagesThanNoncesFails) {
+  std::vector<DlcOutcome> outcomes = {{WIN_AMOUNT, LOSE_AMOUNT},
+                                      {LOSE_AMOUNT, WIN_AMOUNT}};
+  auto dlc_transactions = DlcManager::CreateDlcTransactions(
+      outcomes, LOCAL_PARAMS, REMOTE_PARAMS, REFUND_LOCKTIME, 1, PREMIUM_DEST,
+      OPTION_PREMIUM);
+  auto fund_transaction = dlc_transactions.fund_transaction;
+  auto cets = dlc_transactions.cets;
+  auto cet0 = cets[0];
+  auto lock_script = DlcManager::CreateFundTxLockingScript(LOCAL_FUND_PUBKEY,
+                                                           REMOTE_FUND_PUBKEY);
+
+  auto fund_amount = fund_transaction.GetTransaction().GetTxOut(0).GetValue();
+  auto fund_txid = fund_transaction.GetTransaction().GetTxid();
+
+  // Act/Assert
+  EXPECT_THROW(DlcManager::CreateCetAdaptorSignatures(
+      cets, ORACLE_PUBKEY, ORACLE_R_POINTS, LOCAL_FUND_PRIVKEY, lock_script,
+      fund_amount, {WIN_MESSAGES_HASH, LOSE_MESSAGES_HASH,
+      WIN_MESSAGES_HASH_FEWER_MESSAGES, LOSE_MESSAGES_HASH_FEWER_MESSAGES}),
+               CfdException);
+}

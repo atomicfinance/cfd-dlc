@@ -217,6 +217,11 @@ std::vector<AdaptorPair> DlcManager::CreateCetAdaptorSignatures(
 
   std::vector<AdaptorPair> sigs;
   for (size_t i = 0; i < nb; i++) {
+    if (oracle_r_values.size() < msgs[i].size()) {
+      throw CfdException(
+        CfdError::kCfdIllegalArgumentError,
+        "Number of r values must be greater or equal to number of messages.");
+    }
     std::vector<SchnorrPubkey> r_values;
     for (size_t j = 0; j < msgs[i].size(); j++) {
       r_values.push_back(oracle_r_values[j]);
@@ -261,9 +266,18 @@ bool DlcManager::VerifyCetAdaptorSignatures(
   bool all_valid = true;
 
   for (size_t i = 0; i < nb && all_valid; i++) {
+    if (oracle_r_values.size() < msgs[i].size()) {
+      throw CfdException(
+        CfdError::kCfdIllegalArgumentError,
+        "Number of r values must be greater or equal to number of messages.");
+    }
+    std::vector<SchnorrPubkey> r_values;
+    for (size_t j = 0; j < msgs[i].size(); j++) {
+      r_values.push_back(oracle_r_values[j]);
+    }
     all_valid &= VerifyCetAdaptorSignature(
         signature_and_proofs[i], cets[i], pubkey, oracle_pubkey,
-        oracle_r_values, funding_script_pubkey, total_collateral, msgs[i]);
+        r_values, funding_script_pubkey, total_collateral, msgs[i]);
   }
 
   return all_valid;

@@ -25,22 +25,22 @@ transform_makefile_srclist(${DEBUG_VERSION_FILE} "${CMAKE_CURRENT_BINARY_DIR}/${
 include(${CMAKE_CURRENT_BINARY_DIR}/${EXTERNAL_DEBUG_FILENAME}.cmake)
 endif()
 
-# cfd
 set(CFD_OBJ_BINARY_DIR   ${CFD_DLC_OBJ_BINARY_DIR})
 set(CFD_ROOT_BINARY_DIR  ${CFD_DLC_ROOT_BINARY_DIR})
-
-set(TEMPLATE_PROJECT_NAME           cfd)
-set(TEMPLATE_PROJECT_GIT_REPOSITORY https://github.com/cryptogarageinc/cfd.git)
-set(TEMPLATE_PROJECT_GIT_TAG        v0.1.11)
-set(PROJECT_EXTERNAL  "${CMAKE_SOURCE_DIR}/external/${TEMPLATE_PROJECT_NAME}/external")
-set(DIR_PATH "${CFD_ROOT_BINARY_DIR}/${TEMPLATE_PROJECT_NAME}")
-set(DL_PATH "${CFD_ROOT_BINARY_DIR}/external/${TEMPLATE_PROJECT_NAME}/download")
 
 option(ENABLE_SHARED "enable shared library (ON or OFF. default:ON)" ON)
 option(ENABLE_TESTS "enable code tests (ON or OFF. default:ON)" ON)
 option(ENABLE_ELEMENTS "enable elements code (ON or OFF. default:ON)" ON)
 option(ENABLE_BITCOIN  "enable bitcoin code (ON or OFF. default:ON)" ON)
 set(ENABLE_MODULE_SCHNORRSIG "1")
+
+# cfd
+set(TEMPLATE_PROJECT_NAME           cfd)
+set(TEMPLATE_PROJECT_GIT_REPOSITORY https://github.com/cryptogarageinc/cfd.git)
+set(TEMPLATE_PROJECT_GIT_TAG        v0.3.13)
+set(PROJECT_EXTERNAL  "${CMAKE_SOURCE_DIR}/external/${TEMPLATE_PROJECT_NAME}/external")
+set(DIR_PATH "${CFD_ROOT_BINARY_DIR}/${TEMPLATE_PROJECT_NAME}")
+set(DL_PATH "${CFD_ROOT_BINARY_DIR}/external/${TEMPLATE_PROJECT_NAME}/download")
 
 get_property(PROP_VALUE  GLOBAL  PROPERTY ${TEMPLATE_PROJECT_NAME})
 if(PROP_VALUE)

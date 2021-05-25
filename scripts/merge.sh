@@ -1,0 +1,5 @@
+lipo -create /Users/steven/src/atomicfinance/cfd-dlc/build_ios/Release/libunivalue.a /Users/steven/src/atomicfinance/cfd-dlc/build_sim/Release/libunivalue.a -output libunivalue.a
+lipo -create /Users/steven/src/atomicfinance/cfd-dlc/build_ios/Release/libwally.a /Users/steven/src/atomicfinance/cfd-dlc/build_sim/Release/libwally.a -output libwally.a
+lipo -create /Users/steven/src/atomicfinance/cfd-dlc/build_ios/Release/libcfd.a /Users/steven/src/atomicfinance/cfd-dlc/build_sim/Release/libcfd.a -output libcfd.a
+lipo -create /Users/steven/src/atomicfinance/cfd-dlc/build_ios/Release/libcfdcore.a /Users/steven/src/atomicfinance/cfd-dlc/build_sim/Release/libcfdcore.a -output libcfdcore.a
+lipo -create /Users/steven/src/atomicfinance/cfd-dlc/build_ios/Release/libcfddlc.a /Users/steven/src/atomicfinance/cfd-dlc/build_sim/Release/libcfddlc.a -output libcfddlc.a

@@ -1,0 +1,1 @@
+cp ../ecmult_static_context.h ../external/libwally-core/src/secp256k1/sr/

@@ -110,7 +110,8 @@ TransactionController DlcManager::CreateFundTransaction(
     const Amount& output_amount, const std::vector<TxIn>& local_inputs,
     const TxOut& local_change_output, const std::vector<TxIn>& remote_inputs,
     const TxOut& remote_change_output, const Address& option_dest,
-    const Amount& option_premium, const uint64_t lock_time) {
+    const Amount& option_premium, const uint64_t lock_time,
+    const uint64_t fund_output_serial_id) {
   auto transaction = TransactionController(TX_VERSION, lock_time);
   auto multi_sig_script =
       CreateFundTxLockingScript(local_fund_pubkey, remote_fund_pubkey);
@@ -424,7 +425,7 @@ DlcTransactions DlcManager::CreateDlcTransactions(
     const std::vector<DlcOutcome>& outcomes, const PartyParams& local_params,
     const PartyParams& remote_params, uint64_t refund_locktime,
     uint32_t fee_rate, const Address& option_dest, const Amount& option_premium,
-    uint64_t fund_lock_time, uint64_t cet_lock_time) {
+    uint64_t fund_lock_time, uint64_t cet_lock_time, uint64_t fund_output_serial_id) {
   auto total_collateral = local_params.collateral + remote_params.collateral;
 
   for (auto outcome : outcomes) {
@@ -473,7 +474,7 @@ DlcTransactions DlcManager::CreateDlcTransactions(
   auto fund_tx = CreateFundTransaction(
       local_params.fund_pubkey, remote_params.fund_pubkey, fund_output_value,
       local_inputs, local_change_output, remote_inputs, remote_change_output,
-      option_dest, option_premium, fund_lock_time);
+      option_dest, option_premium, fund_lock_time, fund_output_serial_id);
 
   // the given lock time.
   auto fund_tx_id = fund_tx.GetTransaction().GetTxid();

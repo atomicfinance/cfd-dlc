@@ -92,6 +92,17 @@ struct TxInputInfo {
    *
    */
   uint32_t max_witness_length;
+  /**
+   * @brief Randomly chosen number used to sort inputs
+   *
+   */
+  uint64_t input_serial_id;
+};
+
+struct TxOutputInfo {
+  Script script;
+  Amount value;
+  uint64_t output_serial_id;
 };
 
 /**
@@ -131,6 +142,16 @@ struct PartyParams {
    *
    */
   Amount collateral;
+  /**
+   * @brief Randomly chosen number used to sort execution tx output
+   *
+   */
+  uint64_t payout_serial_id;
+  /**
+   * @brief Randomly chosen number used to sort funding tx output
+   *
+   */
+  uint64_t change_serial_id;
 };
 
 /**
@@ -153,7 +174,9 @@ class CFD_DLC_EXPORT DlcManager {
                                          const TxOut& remote_output,
                                          const Txid& fund_tx_id,
                                          const uint32_t fund_vout,
-                                         uint32_t lock_time = 0);
+                                         uint32_t lock_time = 0,
+                                         uint64_t local_serial_id = 0,
+                                         uint64_t remote_serial_id = 0);
   /**
    * @brief Create a Cets object
    *
@@ -169,7 +192,8 @@ class CFD_DLC_EXPORT DlcManager {
       const Txid& fund_tx_id, const uint32_t fund_vout,
       const Script& local_final_script_pubkey,
       const Script& remote_final_script_pubkey,
-      const std::vector<DlcOutcome> outcomes, uint32_t lock_time = 0);
+      const std::vector<DlcOutcome> outcomes, uint32_t lock_time = 0,
+      uint64_t local_serial_id = 0, uint64_t remote_serial_id = 0);
 
   /**
    * @brief Create a Fund Transaction
@@ -194,11 +218,14 @@ class CFD_DLC_EXPORT DlcManager {
    */
   static TransactionController CreateFundTransaction(
       const Pubkey& local_fund_pubkey, const Pubkey& remote_fund_pubkey,
-      const Amount& output_amount, const std::vector<TxIn>& local_inputs,
-      const TxOut& local_change_output, const std::vector<TxIn>& remote_inputs,
+      const Amount& output_amount, const std::vector<TxInputInfo>& local_inputs_info,
+      const TxOut& local_change_output, const std::vector<TxInputInfo>& remote_inputs_info,
       const TxOut& remote_change_output, const Address& option_dest = Address(),
       const Amount& option_premium = Amount::CreateBySatoshiAmount(0),
-      const uint64_t lock_time = 0);
+      const uint64_t lock_time = 0,
+      const uint64_t local_serial_id = 0,
+      const uint64_t remote_serial_id = 0,
+      const uint64_t output_serial_id = 0);
 
   /**
    * @brief Create a Fund Tx Locking Script object
@@ -540,7 +567,8 @@ class CFD_DLC_EXPORT DlcManager {
       const PartyParams& remote_params, uint64_t refund_locktime,
       uint32_t fee_rate, const Address& option_dest = Address(),
       const Amount& option_premium = Amount::CreateBySatoshiAmount(0),
-      const uint64_t fund_lock_time = 0, const uint64_t cet_lock_time = 0);
+      const uint64_t fund_lock_time = 0, const uint64_t cet_lock_time = 0,
+      const uint64_t fund_output_serial_id = 0);
 
  private:
   /**
